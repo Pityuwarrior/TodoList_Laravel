@@ -24,9 +24,27 @@
         <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
             <div style="color: white;">
                 <h1>Todo list</h1>
-                <label for = "listItem">New Todo Item</label> </br>
-                <input type = "text" name = "listItem"> </br>
-                <button type="submit">Save Item</button>
+                <!-- Adatok ki listázása az adatbázisból. -->
+                @foreach($listItems as $listItem)
+                    <div class = "flex" style="align-items: center;">
+                        <p style="<?= $listItem->is_complete === 0 ? '':'color: green'?>">Item: {{ $listItem->name }}</p>
+                        <form method="post" action = "{{ route('markComplete', $listItem->id) }}" accept-charset="UTF-8">
+                            {{ csrf_field() }}    
+                            <button type="submit" style="max-height: 25px; margin-left: 20px;">Mark complete</button>
+                        </form>
+                        <form method="post" action = "{{ route('delete', $listItem->id) }}" accept-charset="UTF-8">
+                            {{ csrf_field() }}
+                            <button type="submit" style="max-height: 25px; margin-left: 20px;">Delete</button>
+                        </form>
+                    </div> 
+                @endforeach
+                <form method="post" action = "{{ route('saveItem') }}" accept-charset="UTF-8">
+                    <!-- A form-ban egy token, amely biztonsági feladatotak lát el. !-->
+                    {{ csrf_field() }}
+                    <label for = "listItem">New Todo Item</label> </br>
+                    <input type = "text" name = "listItem"> </br>
+                    <button type="submit">Save Item</button>
+                </form>    
             </div>
         </div>
     </body>
